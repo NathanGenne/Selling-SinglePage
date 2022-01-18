@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="45" height="35" viewBox="0 0 91 64">
+  <g id="menu-fictif" transform="translate(5 5)">
+    <path id="Trace1" d="M4.5,18h81" transform="translate(-4.5 9)" fill="#fff" stroke="#f90" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
+    <path id="Trace2" d="M4.5,9h81" transform="translate(-4.5 -9)" fill="#fff" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
+    <path id="Trace3" d="M4.5,27h81" transform="translate(-4.5 27)" fill="#fff" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10"/>
+  </g>
+</svg>

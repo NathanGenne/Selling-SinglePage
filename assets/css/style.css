@@ -1,0 +1,36 @@
+/* couleurs importantes */
+.dark-blue {
+    background-color: #333DC1;
+}
+.light-blue, body {
+    background-color: #4A98FF;
+}
+.mask {
+    background-color: rgba(0, 0, 0, 0.5);
+    margin-top: 7%;
+}
+
+.card, .img-fluid {
+    border-radius: 15px;
+}
+
+.orangeBorder {
+    border: 2px solid orange;
+}
+a.orangeBorder:hover {
+    color: white;
+    background-color: orange;
+}
+
+/* boutons navigation */
+.nav-link { color: white; }
+.nav-link:hover { color: orange; }
+nav a { font-size: 1.5rem; }
+
+
+@media only screen and (max-width: 600px) {
+    .articles-list {
+        grid-template-columns: 1fr;
+        grid-template-columns: repeat(400px, 12);
+    }
+}

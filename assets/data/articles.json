@@ -1,0 +1,114 @@
+{
+    "articles": [
+        {
+            "id": 0,
+            "title": "Micro Macro Crime city - Full house",
+            "overview": "Full House est le second volet de la série MicroMacro : Crime City. C‘est une nouvelle partie de la ville, avec ses 16 enquêtes à mener, qui vous ouvre les bras !",
+            "img_path": "micro-macro-crime-city-full-house.jpg",
+            "img_alt":"Boite micro-macro",
+            "price": 32,
+            "age": 8,
+            "playTime":15,
+            "category": "coopération"
+        },
+        {
+            "id": 1,
+            "title": "",
+            "overview": "",
+            "img_path": "",
+            "img_alt":"",
+            "price": 5.8,
+            "age": 8,
+            "playTime":15,
+            "category": ""
+        },
+        {
+            "id": 2,
+            "title": "",
+            "overview": "",
+            "img_path": "",
+            "img_alt":"",
+            "price": 7.3,
+            "age": 8,
+            "playTime":15,
+            "category": ""
+        },
+        {
+            "id": 3,
+            "title": "",
+            "overview": "",
+            "img_path": "",
+            "img_alt":"",
+            "price": 8.5,
+            "age": 8,
+            "playTime":15,
+            "category": ""
+        },
+        {
+            "id": 4,
+            "title": "",
+            "overview": "",
+            "img_path": "",
+            "img_alt":"",
+            "price": 7.1,
+            "age": 8,
+            "playTime":15,
+            "category": ""
+        },
+        {
+            "id": 5,
+            "title": "",
+            "overview": "",
+            "img_path": "",
+            "img_alt":"",
+            "price": 7.4,
+            "age": 8,
+            "playTime":15,
+            "category": ""
+        },
+        {
+            "id": 6,
+            "title": "",
+            "overview": "",
+            "img_path": "",
+            "img_alt":"",
+            "price": 8.6,
+            "age": 8,
+            "playTime":15,
+            "category": ""
+        },
+        {
+            "id": 7,
+            "title": "",
+            "overview": "",
+            "img_path": "",
+            "img_alt":"",
+            "price": 8.3,
+            "age": 8,
+            "playTime":15,
+            "category": ""
+        },
+        {
+            "id": 8,
+            "title": "",
+            "overview": "",
+            "img_path": "",
+            "img_alt":"",
+            "price": 5.5,
+            "age": 8,
+            "playTime":15,
+            "category": ""
+        },
+        {
+            "id": 9,
+            "title": "",
+            "overview": "",
+            "img_path": "",
+            "img_alt":"",
+            "price": 8.4,
+            "age": 8,
+            "playTime":15,
+            "category": ""
+        }
+    ]
+}
