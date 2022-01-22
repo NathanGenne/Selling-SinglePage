@@ -5,15 +5,22 @@
 .light-blue, body {
     background-color: #4A98FF;
 }
+.white {
+    background-color: #ffffff;
+}
+
+/* mask publicité */
 .mask {
     background-color: rgba(0, 0, 0, 0.5);
     margin-top: 7%;
 }
 
+/* bordure des cadres et images */
 .card, .img-fluid {
     border-radius: 15px;
 }
 
+/* bordure des boutons de cadres */
 .orangeBorder {
     border: 2px solid orange;
 }
@@ -22,15 +29,16 @@ a.orangeBorder:hover {
     background-color: orange;
 }
 
+.logo:hover {
+    color: white;
+}
+
+.panier {
+    top: 150px;
+    right: 15px;
+}
+
 /* boutons navigation */
 .nav-link { color: white; }
-.nav-link:hover { color: orange; }
+.menu a:hover { color: orange; }
 nav a { font-size: 1.5rem; }
-
-
-@media only screen and (max-width: 600px) {
-    .articles-list {
-        grid-template-columns: 1fr;
-        grid-template-columns: repeat(400px, 12);
-    }
-}
