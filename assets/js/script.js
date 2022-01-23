@@ -47,7 +47,7 @@ fetch('assets/data/articles.json')
 
 // Création des variables fullprice et nbItems 
 let fullprice      = 0;
-let finalprice   = 0;
+let finalprice     = 0;
 let nbItems        = 0;
 let articlesIdList = [];
 
@@ -212,9 +212,9 @@ function quantity(idTarget) {
         claculus = -price;
       }
       // Le prix total des articles additionnés
-      let fullprice = parseFloat(document.getElementById('fullprice').innerHTML.split(" ").shift());
+      let fullpriceTemp = parseFloat(document.getElementById('fullprice').innerHTML.split(" ").shift());
       // Le nouveau prix à payer (hors frais de port) après changement de valeur
-      let newPrice = fullprice+claculus;
+      let newPrice = fullpriceTemp+claculus;
       // Le nouveau prix que le consommateur devra payer
       let newFinalPrice;
 
@@ -270,9 +270,9 @@ for (btnDelete of btnDeleteList) {
       // Multiplie les deux pour obtenir le prix total à enlever
       let removedPrice = itemPrice*quantity;
       // Le prix total des articles additionnés
-      let fullprice = parseFloat(document.getElementById('fullprice').innerHTML.split(" ").shift());
+      let fullpriceTemp = parseFloat(document.getElementById('fullprice').innerHTML.split(" ").shift());
       // Soustrait ce prix à enlever au coût total des articles
-      let newPrice     = fullprice-removedPrice;
+      let newPrice     = fullpriceTemp-removedPrice;
       // Le nouveau prix que le consommateur devra payer
       let newFinalPrice;
       // Change le prix total du panier
@@ -312,6 +312,9 @@ function emptyPrice() {
   document.getElementById('fullprice').innerHTML  = '';
   document.getElementById('shipment').innerHTML   = '';
   document.getElementById('payedprice').innerHTML = '';
+  // reset du prix total
+  fullprice  = 0;
+  finalprice = 0;
 }
 
 
