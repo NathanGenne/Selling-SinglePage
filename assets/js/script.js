@@ -43,11 +43,11 @@ fetch('assets/data/articles.json')
     // Appel des fonctions
     addToCart();
     panier();
-    supprPanier();
 });
 
 // Création des variables fullprice et nbItems 
 let fullprice      = 0;
+let finalprice   = 0;
 let nbItems        = 0;
 let articlesIdList = [];
 
@@ -71,25 +71,15 @@ function addToCart() {
       let title       = card.querySelector(`.card-title`).textContent;
       let img_path    = card.querySelector(`.js-img`).src.split("/").pop();
       let price       = parseFloat(card.querySelector(`.js-price`).textContent.split(" ").shift());
+      // fullprice : prix des articles aditionnés
       fullprice       = price + fullprice;
-      // Réduction des frais de port à partir de 50 € d'achat
-      if ( fullprice >= 50 ) { fullprice = fullprice - 10; }
+      // finalprice : prix des articles aditionnés + frais de port
+      finalprice      = fullprice;
 
-      // Si cet article est déjà dans le panier :
-      if (articlesIdList.includes(idTarget)) {
-        // Récupèrer la quantité de cet article en stock
-        let nbItem = articlesIdList.filter(function(e) {
-          return e == idTarget;
-        });
-        console.log(nbItem);
-        // Augmenter cette valeur de 1
-        card.querySelector('.dropdown-toggle').innerHTML = parseInt(nbItem)++;
-        // Sinon l'id est ajouté au tableau d'ID
-      }
-      articlesIdList.push(idTarget);
-      console.log(articlesIdList);
+      // Addition des frais de port pour moins de 50 € d'achat
+      if ( fullprice <= 50 ) { finalprice = fullprice + 10; }
 
-      // création d'un nouveau cadre d'article
+      // génération d'un nouveau cadre d'article
       let articlePanier = `
       <div class="card mb-4 orangeBorder">
           <div class="card-body p-4">
@@ -107,41 +97,67 @@ function addToCart() {
               <div class="col-md-2 d-flex justify-content-center">
                 <div>
                   <p class="text-muted mb-4 pb-2">Quantité</p>
-                  <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="quantity" data-bs-toggle="dropdown" aria-expanded="false">1</button>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="quantity">
-                      <li><a class="dropdown-item" href="#">2</a></li>
-                      <li><a class="dropdown-item" href="#">3</a></li>
-                      <li><a class="dropdown-item" href="#">4</a></li>
-                    </ul>
+                  <div class="ItemQuantity">
+                    <a class="col btn"><i class="bi bi-dash-square quantity minus"></i></a>
+                    <a class="col btn btn-secondary number"id="quantity${idTarget}">1</a>
+                    <a class="col btn"><i class="bi bi-plus-square quantity plus"></i></a>
                   </div>
                 </div>
               </div>
               <div class="col-md-2 d-flex justify-content-center">
                 <div>
-                  <p class="text-muted mb-4 pb-2">Prix</p>
-                  <p class="lead fw-normal mb-0">${price} €</p>
+                  <p class="text-muted mb-4 pb-2">Prix individuel</p>
+                  <p class="price lead fw-normal mb-0">${price} €</p>
                 </div>
               </div>
               <div class="col-md-2 d-flex justify-content-center">
                 <div>
-                  <a class="btn orangeBorder js-btn-delete me-1" href="#!" role="button">Supprimer</a>
+                  <a class="btn orangeBorder js-btn-delete me-1" href="#!" role="button">X</a>
                 </div>
               </div>
             </div>
           </div>
         </div>
       `;
-      document.getElementById('listArticlesPanier').innerHTML += articlePanier;
-      // Ajout d'un objet au compteur
-      nbItems++;
+
+      // Si cet article est déjà dans le panier :
+      if (articlesIdList.includes(idTarget)) {
+        // Récupèrer un tableau de la quantité de cet article en stock
+        let nbItem = articlesIdList.filter(function(e) { return e == idTarget; });
+        // Change la quantité d'article dans le panier
+        document.getElementById(`quantity${idTarget}`).innerHTML = nbItem.length+1;
+      }
+      // Sinon : ajoute un nouveau cadre au panier
+      else {
+        document.getElementById('listArticlesPanier').innerHTML += articlePanier;
+      }
+      // Ajout de l'id de l'article ajouté pour une future comptabilisation
+      articlesIdList.push(idTarget);
       
       // Change le prix total du panier
-      document.getElementById('fullprice').innerHTML = fullprice + ' €';
+      document.getElementById('fullprice').innerHTML  = fullprice.toFixed(2) + ' €';
+
+      // Change les frais de ports selon le prix total (fullprice)
+      if (fullprice <= 50) {
+        document.getElementById('shipment').innerHTML   = '10 €';
+      } else {
+        document.getElementById('shipment').innerHTML   = 'GRATUIT !';
+      }
+      // Change le prix à payer
+      document.getElementById('payedprice').innerHTML = finalprice.toFixed(2) + ' €';
+
+      // --------------------------------------------------
+      // Affichage du nombre d'articles dans le panier
+      // --------------------------------------------------
       let divNbItems = document.getElementById('nbItems');
-      if (nbItems == 1) {
-        divNbItems.innerHTML = `(${nbItems} article)`;
-      } else { divNbItems.innerHTML = `(${nbItems} articles)`; }
+      // Gestion de l'orthographe
+      if (articlesIdList.length == 1) {
+        divNbItems.innerHTML = `(1 article)`;
+      } else { divNbItems.innerHTML = `(${articlesIdList.length} articles)`; }
+
+      // Appel des fonctions
+      supprPanier(idTarget);
+      quantity(idTarget);
     };
   }
 }
@@ -168,20 +184,148 @@ function panier() {
   }
 }
 
+
+// ------------------------------------------------------
+// Changement de quantité d'un article dans le panier
+// ------------------------------------------------------
+
+function quantity(idTarget) {
+  // Pointe les boutons clickables
+  let btnQuantity = document.querySelectorAll('.quantity');
+  // Si un bouton est clické :
+  for (btn of btnQuantity) {
+    btn.onclick = (e) => {
+      // Pointe le plus haut parent
+      let card = e.target.closest('.card');
+      // Pointe le prix de l'objet
+      let price = parseFloat(card.querySelector('.price').innerHTML.split(" ").shift());
+      // Indique si on additionne ou soustrait le prix
+      let claculus;
+      // Si le bouton est un bouton + :
+      if (e.target.classList.contains('plus')) {
+        card.querySelector('.number').innerHTML = parseFloat(card.querySelector('.number').innerHTML)+1;
+        claculus = price;
+      }
+      // Si le bouton est un bouton - :
+      else {
+        card.querySelector('.number').innerHTML = parseFloat(card.querySelector('.number').innerHTML)-1;
+        claculus = -price;
+      }
+      // Le prix total des articles additionnés
+      let fullprice = parseFloat(document.getElementById('fullprice').innerHTML.split(" ").shift());
+      // Le nouveau prix à payer (hors frais de port) après changement de valeur
+      let newPrice = fullprice+claculus;
+      // Le nouveau prix que le consommateur devra payer
+      let newFinalPrice;
+
+      // Change le prix total du panier
+      document.getElementById('fullprice').innerHTML = newPrice.toFixed(2) + ' €';
+
+      // Change les frais de ports selon le prix total (newPrice)
+      if (newPrice <= 50) {
+        document.getElementById('shipment').innerHTML = '10 €';
+        newFinalPrice = parseFloat(newPrice+10);
+      } else {
+        document.getElementById('shipment').innerHTML = 'GRATUIT !';
+        newFinalPrice = newPrice;
+      }
+      // Change le prix à payer
+      document.getElementById('payedprice').innerHTML = newFinalPrice.toFixed(2) + ' €';
+
+      // Suppression d'un article dans la liste
+      //articlesIdList = removeItemFromArray(articlesIdList,articlesIdList.indexOf(idTarget));
+      delete articlesIdList[articlesIdList.indexOf(idTarget)];
+      console.log(articlesIdList);
+
+      // Si la quantité est nulle, on supprime le cadre de l'article
+      if (card.querySelector('.number').innerHTML=='0') {
+        card.remove();
+      }
+
+      // Si il n'y a plus rien dans le panier :
+      if (parseFloat(document.getElementById('fullprice').innerHTML.split(" ").shift())==0) {
+        emptyPrice();
+      }
+    }
+  }
+}
+
+
 // --------------------------------------------------
 // Supprime un objet du panier
 // --------------------------------------------------
 
-function supprPanier() {
+function supprPanier(idTarget) {
   // Pointe les boutons clickables
-  btnDeleteList = document.querySelectorAll('.js-btn-delete');
+  let btnDeleteList = document.querySelectorAll('.js-btn-delete');
 // Pour chaque bouton
 for (btnDelete of btnDeleteList) {
     btnDelete.onclick = (e) => {
-      console.log('GG !');
-        // Grace à l'objet événement (e), je peux repérer le bouton cliqué (target)
-        // Ensuite, je vais chercher le plus proche ancêtre ".orangeBorder" avec closest et je le supprime (remove).
-        e.target.closest('.orangeBorder').remove();
+      // Pointe le plus haut parent
+      let card         = e.target.closest('.card');
+      // Pointe le prix de l'objet
+      let itemPrice    = parseFloat(card.querySelector('.price').textContent.split(" ").shift());
+      // Pointe la quantité d'objet
+      let quantity     = parseFloat(card.querySelector('.number').textContent);
+      // Multiplie les deux pour obtenir le prix total à enlever
+      let removedPrice = itemPrice*quantity;
+      // Le prix total des articles additionnés
+      let fullprice = parseFloat(document.getElementById('fullprice').innerHTML.split(" ").shift());
+      // Soustrait ce prix à enlever au coût total des articles
+      let newPrice     = fullprice-removedPrice;
+      // Le nouveau prix que le consommateur devra payer
+      let newFinalPrice;
+      // Change le prix total du panier
+      document.getElementById('fullprice').innerHTML = newPrice.toFixed(2) + ' €';
+
+      // Change les frais de ports selon le prix total (newPrice)
+      if (newPrice <= 50) {
+        document.getElementById('shipment').innerHTML = '10 €';
+        newFinalPrice = newPrice+10;
+      } else {
+        document.getElementById('shipment').innerHTML = 'GRATUIT !';
+      }
+      // Change le prix à payer
+      document.getElementById('payedprice').innerHTML = newFinalPrice.toFixed(2) + ' €';
+
+      // Change la quantité d'articles comptés par la liste
+      articlesIdList = articlesIdList.filter(function(e) { return e != idTarget; });
+
+      // Si il n'y a plus rien dans le panier :
+      if (parseFloat(document.getElementById('fullprice').innerHTML.split(" ").shift())==0) {
+        emptyPrice();
+      }
+
+      // Grace à l'objet événement (e), je peux repérer le bouton cliqué (target)
+      // Ensuite, je vais chercher le plus proche ancêtre ".orangeBorder" avec closest et je le supprime (remove).
+      e.target.closest('.card').remove();
     };
 }
+}
+
+
+// --------------------------------------------------
+// Supprime l'affichage du prix
+// --------------------------------------------------
+
+function emptyPrice() {
+  document.getElementById('fullprice').innerHTML  = '';
+  document.getElementById('shipment').innerHTML   = '';
+  document.getElementById('payedprice').innerHTML = '';
+}
+
+
+// --------------------------------------------------
+// Supprime un article de la liste
+// --------------------------------------------------
+
+function removeItemFromArray(array, n) {
+  const newArray = [];
+
+  for ( let i = 0; i < array.length; i++) {
+      if(array[i] !== n) {
+          newArray.push(array[i]);
+      }
+  }
+  return newArray;
 }

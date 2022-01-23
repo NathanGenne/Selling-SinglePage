@@ -33,6 +33,11 @@ a.orangeBorder:hover {
     color: white;
 }
 
+.bi {
+    font-size: 1.5rem;
+    color: orange;
+}
+
 .panier {
     top: 150px;
     right: 15px;
