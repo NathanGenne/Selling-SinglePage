@@ -146,14 +146,7 @@ function addToCart() {
       // Change le prix à payer
       document.getElementById('payedprice').innerHTML = finalprice.toFixed(2) + ' €';
 
-      // --------------------------------------------------
-      // Affichage du nombre d'articles dans le panier
-      // --------------------------------------------------
-      let divNbItems = document.getElementById('nbItems');
-      // Gestion de l'orthographe
-      if (articlesIdList.length == 1) {
-        divNbItems.innerHTML = `(1 article)`;
-      } else { divNbItems.innerHTML = `(${articlesIdList.length} articles)`; }
+      nbArticleInCart();
 
       // Appel des fonctions
       supprPanier(idTarget);
@@ -233,6 +226,7 @@ function quantity(idTarget) {
       document.getElementById('payedprice').innerHTML = newFinalPrice.toFixed(2) + ' €';
 
       // Suppression d'un article dans la liste
+      // cette ligne ne fonctionne pas, malheureusement
       //articlesIdList = removeItemFromArray(articlesIdList,articlesIdList.indexOf(idTarget));
       delete articlesIdList[articlesIdList.indexOf(idTarget)];
       console.log(articlesIdList);
@@ -246,6 +240,9 @@ function quantity(idTarget) {
       if (parseFloat(document.getElementById('fullprice').innerHTML.split(" ").shift())==0) {
         emptyPrice();
       }
+
+      // Mise à jour du nombre d'articles
+      nbArticleInCart();
     }
   }
 }
@@ -299,6 +296,9 @@ for (btnDelete of btnDeleteList) {
       // Grace à l'objet événement (e), je peux repérer le bouton cliqué (target)
       // Ensuite, je vais chercher le plus proche ancêtre ".orangeBorder" avec closest et je le supprime (remove).
       e.target.closest('.card').remove();
+
+      // Mise à jour du nombre d'articles
+      nbArticleInCart();
     };
 }
 }
@@ -317,6 +317,18 @@ function emptyPrice() {
   finalprice = 0;
 }
 
+
+// --------------------------------------------------
+// Affichage du nombre d'articles dans le panier
+// --------------------------------------------------
+
+function nbArticleInCart() {
+  let divNbItems = document.getElementById('nbItems');
+  // Gestion de l'orthographe
+  if (articlesIdList.length == 1) {
+    divNbItems.innerHTML = `(1 article)`;
+  } else { divNbItems.innerHTML = `(${articlesIdList.length} articles)`; }
+}
 
 // --------------------------------------------------
 // Supprime un article de la liste
